@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useParams } from "react-router";
-// import { Link } from "react-router-dom";
+import { useParams, withRouter, useLocation } from "react-router";
+import { Link, NavLink } from "react-router-dom";
 // import { getPatients } from "../data";
 // import "../index.css";
 
 function Triages2() {
-    <p>hello</p>
-  let params = useParams();
+  <p>hello</p>;
+  let params = useLocation().pathname.split("/")[2];
   let patient = JSON.parse(localStorage.getItem("patinats"));
-  let Objpatient = getPatient(Number(params.id));
+  let Objpatient = getPatient(params);
 
   let [displayBorder, setDisplayBorder] = useState(false);
   let [buttunRegister1, setButtunRegister1] = useState("grid");
@@ -20,19 +20,20 @@ function Triages2() {
   let [Category, setCategory] = useState("");
 
   function handleWedith(event) {
-    setWedith((Wedith = event.target.value));
+    setWedith(event.target.value);
   }
   function handleBloodPresure(event) {
-    setBloodPresure((BloodPresure = event.target.value));
+    setBloodPresure(event.target.value);
   }
   function handleCategory(event) {
-    setCategory((Category = event.target.value));
+    console.log(event.target.value);
+    setCategory(event.target.value);
   }
   function handleHaartRate(event) {
-    setHaartRate((haartRate = event.target.value));
+    setHaartRate(event.target.value);
   }
   function handleNote(event) {
-    setNote((note = event.target.value));
+    setNote(event.target.value);
   }
 
   function handelChangeborder(event) {
@@ -50,90 +51,149 @@ function Triages2() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    Objpatient.BloodPresure = BloodPresure;
-    Objpatient.Wedith = Wedith;
-    Objpatient.Category = Category;
+    Objpatient.bloodPresure = BloodPresure;
+    Objpatient.weight = Wedith;
+    Objpatient.category = Category;
+    Objpatient.haartRate = Wedith;
+    Objpatient.note = note;
     let NewArray = JSON.parse(localStorage.getItem("MyNewArray"));
+    console.log(NewArray);
     NewArray.push(Objpatient);
     localStorage.setItem("MyNewArray", JSON.stringify(NewArray));
   }
+  let fillData = JSON.parse(localStorage.getItem("patinats"));
 
-  function getPatient(idd) {
-    return patient.find((Pat) => Pat.idd === idd);
+  function getPatient(title) {
+    return patient.find((Pat) => Pat.idN === title);
   }
   return (
-    <main id="main" style={{ padding: "1rem" }}>
-      <div class="container">
-        <center>
-          {" "}
-          <h1> Registeration Form</h1>{" "}
-        </center>
-        <hr />
-        <label> Firstname </label>
-        <input type="text" name="firstName" value={Objpatient.id} />
-        <label> Lastname: </label>
-        <input type="text" name="lastName" value={Objpatient.lastName} />
-        <label> Age: </label>
-        <input type="text" name="age" value={Objpatient.age} />
-        <label for="idN">
-          <br />
-          National Id
-          <br />
-        </label>
-        <input type="text" value={Objpatient.idN} name="idN" />
-        <button type="submit" onClick={handelChangeborder} class="registerbtn">
-          Confirm
-        </button>
+    <main id="main" style={{ padding: "1rem", display: "flex" }}>
+      <div
+        style={{
+          padding: "1rem",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "start",
+        }}
+      >
+        {fillData.map((element, idx) => {
+          return (
+            <NavLink to={`/Triage/${element.idN}`} key={element.idN}>
+              {element.id}
+            </NavLink>
+          );
+        })}
       </div>
-      <hr />
+      {params ? (
+        <div
+          style={{ display: "flex", flexDirection: "column", padding: "20px" }}
+        >
+          <div class="container">
+            <center>
+              {" "}
+              <h1> Registeration Form</h1>{" "}
+            </center>
+            <hr />
+            <label> Firstname </label>
+            <input type="text" name="firstName" value={Objpatient.id} />
+            <label> Lastname: </label>
+            <input type="text" name="lastName" value={Objpatient.lastName} />
+            <label> Age: </label>
+            <input type="text" name="age" value={Objpatient.age} />
+            <label for="idN">
+              <br />
+              National Id
+              <br />
+            </label>
+            <input type="text" value={Objpatient.idN} name="idN" />
+            <button
+              type="submit"
+              onClick={handelChangeborder}
+              class="registerbtn"
+            >
+              Confirm
+            </button>
+          </div>
+          <hr />
 
-      <div class="container">
-        <label> Weight </label>
-        <input
-          type="text"
-          onChange={handleWedith}
-          name="wedith"
-          placeholder="Wedith"
-        />
-        <label> Haart Rate </label>
-        <input
-          type="text"
-          onChange={handleHaartRate}
-          name="haartRate"
-          placeholder=" Haart Rate "
-        />
-        <label> Blood Presure: </label>
-        <input
-          type="text"
-          onChange={handleBloodPresure}
-          name="BloodPresure"
-          placeholder="Blood-Presure"
-        />
-        <label>Category:</label>
-        <br />
-        <input type="radio" onChange={handleCategory} name="Critical" />{" "}
-        Critical
-        <br />
-        <input type="radio" onChange={handleCategory} name="Emergency" />{" "}
-        Emergency
-        <br />
-        <input type="radio" onChange={handleCategory} name="Urgent" /> Urgent
-        <br />
-        <input type="radio" onChange={handleCategory} name="SemiUrgent" />{" "}
-        Semi-Urgent
-        <textarea
-          name="note"
-          placeholder="Note"
-          onChange={handleNote}
-        ></textarea>
-        <button type="submit" onClick={handleSubmit} class="registerbtn">
-          Submit
-        </button>
-      </div>
+          <div class="container">
+            <label> Weight </label>
+            <input
+              type="text"
+              onChange={handleWedith}
+              name="wedith"
+              placeholder="Wedith"
+            />
+            <label> Haart Rate </label>
+            <input
+              type="text"
+              onChange={handleHaartRate}
+              name="haartRate"
+              placeholder=" Haart Rate "
+            />
+            <label> Blood Presure: </label>
+            <input
+              type="text"
+              onChange={handleBloodPresure}
+              name="BloodPresure"
+              placeholder="Blood-Presure"
+            />
+            Category:
+            <input
+              type="radio"
+              id="age1"
+              name="age"
+              onChange={handleCategory}
+              value="Critical"
+            />
+            <label for="age1">Critical</label>
+            <br />
+            <input
+              type="radio"
+              id="age2"
+              name="age"
+              onChange={handleCategory}
+              value="Emergency"
+            />
+            <label for="age2">Emergency</label>
+            <br />
+            <input
+              type="radio"
+              id="age3"
+              name="age"
+              onChange={handleCategory}
+              value="Urgent"
+            />
+            <label for="age3">Urgent</label>
+            <br />
+            <br />
+            <input
+              type="radio"
+              id="age3"
+              name="age"
+              value="Semi-Urgent"
+              onChange={handleCategory}
+            />
+            <label for="age3">Semi-Urgent</label>
+            <br />
+            Semi-Urgent
+            <textarea
+              name="note"
+              placeholder="Note"
+              onChange={handleNote}
+            ></textarea>
+            <button type="submit" onClick={handleSubmit} class="registerbtn">
+              Submit
+            </button>
+          </div>
+        </div>
+      ) : (
+        <h1>no</h1>
+      )}
     </main>
   );
 }
-export default Triages2;
+export default withRouter(Triages2);
 
 // import React, { useState, useEffect } from "react";
 // import { PatinatsModule } from "../components/Modules";
