@@ -188,7 +188,7 @@ function Triages2() {
           </div>
         </div>
       ) : (
-        <h1>no</h1>
+        <div className="not Data"> </div>
       )}
     </main>
   );

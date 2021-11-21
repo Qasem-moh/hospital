@@ -67,7 +67,7 @@ function Triages2() {
     return patient.find((Pat) => Pat.idN === title);
   }
   return (
-    <main id="main" style={{ padding: "1rem", display: "flex" }}>
+    <main id="main" style={{ padding: "1rem", display: "flex" ,borderRight:"1px solid", width:"150px",marginRight:"150px"}}>
       <div
         style={{
           padding: "1rem",
@@ -86,7 +86,7 @@ function Triages2() {
       </div>
       {params ? (
         <div
-          style={{ display: "flex", flexDirection: "column", padding: "20px" }}
+          style={{ display: "flex", flexDirection: "column", padding: "20px" ,marginLeft:"150px"}}
         >
           <div class="container">
             <center>
@@ -97,7 +97,7 @@ function Triages2() {
             <label> Firstname </label>
             <input type="text" name="firstName" value={Objpatient.id} />
             <label> Lastname: </label>
-            <input type="text" name="lastName" value={Objpatient.lastName} />
+            <input type="text" name="lastName" value={Objpatient.name} />
             <label> Age: </label>
             <input type="text" name="age" value={Objpatient.age} />
             <label for="idN">
@@ -188,7 +188,7 @@ function Triages2() {
           </div>
         </div>
       ) : (
-        <h1>no</h1>
+        <div className="not Data"> </div>
       )}
     </main>
   );
